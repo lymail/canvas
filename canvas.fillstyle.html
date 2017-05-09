@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+
+<body>
+	<canvas width='400' height='400' id="canvas"></canvas>
+</body>
+<script>
+//canvas默认宽300 高150
+	var oC = document.getElementById('canvas');
+	var ctx = oC.getContext('2d');
+	ctx.fillStyle='#0000ff';
+	ctx.fillRect(20,20,150,100);
+
+	ctx.strokeStyle='#0000ff';
+	ctx.strokeRect(20,20,180,180);
+</script>
+</html>

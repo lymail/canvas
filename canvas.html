@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas width='400' height='400' style="border:1px solid #000" id="canvas">
+    </canvas>
+    <div>
+        <input type='button' value='填充矩形' id="fillRect">
+        <input type='button' value='边框矩形' id="strokeRect">
+        <input type='button' value='清除画布' id="clearRect">
+        <input type="color" id="color">
+    </div>
+    <ul id="ul">
+        <li>x:
+            <input type="text">
+        </li>
+        <li>y:
+            <input type="text">
+        </li>
+        <li>w:
+            <input type="text">
+        </li>
+        <li>h:
+            <input type="text">
+        </li>
+    </ul>
+</body>
+<script>
+var oC = document.getElementById('canvas');
+var aIn = document.getElementsByTagName('input');
+var oCtx = oC.getContext('2d');
+var aCol = document.getElementById('color');
+var oUl = document.getElementById('ul');
+var aLi = oUl.getElementsByTagName('input');
+var hua = null;
+var sty = null;
+var obj = {};
+
+function b(sId, style, sColor, obj) {
+    oCtx[style] = sColor;
+    oCtx[sId](obj.x, obj.y, obj.w, obj.h);
+}
+
+function clear() {
+    oCtx.clearRect(0, 0, oC.width, oC.height);
+}
+aCol.onchange = function() {
+    if (hua) {
+
+        clear()
+        b(hua, sty, aCol.value, obj);
+    } else {
+        return false;
+    }
+}
+
+for (var i = 0; i < aLi.length; i++) {
+    aLi[i].onchange = function() {
+        if (hua) {
+            obj = {
+                x: aLi[0].value || 0,
+                y: aLi[1].value || 0,
+                w: aLi[2].value || 200,
+                h: aLi[3].value || 200,
+            }
+            clear()
+            b(hua, sty, aCol.value, obj);
+        } else {
+            return false;
+        }
+    }
+}
+for (var i = 0; i < aIn.length; i++) {
+    if (aIn[i].type == 'button') {
+        aIn[i].onclick = function() {
+            if (this.id == 'clearRect') {
+                clear()
+            } else {
+                clear();
+                obj = {
+                    x: aLi[0].value || 0,
+                    y: aLi[1].value || 0,
+                    w: aLi[2].value || 200,
+                    h: aLi[3].value || 200,
+                }
+                console.log(obj)
+                sty = this.id.replace(/Rect/, 'Style')
+                hua = this.id
+                b(this.id, sty, aCol.value, obj);
+            }
+        }
+    }
+}
+</script>
+
+</html>
