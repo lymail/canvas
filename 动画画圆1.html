@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style>
+canvas {
+    border: 1px solid #000;
+}
+</style>
+
+<body>
+    <canvas width="320" height="320" id="canvas"></canvas>
+   
+    <script>
+    ;
+    (function() {
+        window.requestAnimFrame = (function() {
+            return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function(callback, element) {
+                    window.setTimeout(callback, 1000 / 60);
+                };
+        })();
+        //图画高清
+        var getPixelRatio = function(context) {
+            var backingStore = context.backingStorePixelRatio ||
+                context.webkitBackingStorePixelRatio ||
+                context.mozBackingStorePixelRatio ||
+                context.msBackingStorePixelRatio ||
+                context.oBackingStorePixelRatio ||
+                context.backingStorePixelRatio || 1;
+
+            return (window.devicePixelRatio || 1) / backingStore;
+        };
+        var oC = document.querySelector('#canvas');
+        var oGC = oC.getContext('2d');
+        var num = 0;
+        getPixelRatio(oGC);
+        function d2r(n) {
+            return n * Math.PI / 180;
+        }
+
+        function anmine(obj) {
+            //console.log(num)
+            var obj = obj || {};
+           obj.progress = obj.progress > 100 ? 100 : obj.progress;
+            obj.progress = obj.progress < 0 ? 0 : obj.progress;
+            obj.speed = obj.speed > 1 ? 0.5 : obj.speed;
+            obj.speed = obj.speed < 0 ? 0 : obj.speed;
+            obj.lw = obj.lw < 5 ? 5 : obj.lw;
+            //console.log(num)
+                num+=obj.speed;
+                darwFun(num,obj.rad,obj.lw)
+            if(num<=obj.progress){
+                timer =requestAnimFrame(anmine.bind(null,obj))
+            }else{
+                cancelAnimationFrame(timer);
+            }
+
+        }
+
+        function darwFun(num, rad, lw) {
+            //console.log(num)
+            oGC.clearRect(0, 0, oC.width, oC.height);
+            oGC.lineWidth = lw;
+            //背景圆
+            oGC.beginPath();
+            oGC.strokeStyle='#ccc';
+            oGC.arc(oC.width/2,oC.height/2,rad,0,2*Math.PI,false);
+            oGC.stroke();
+            oGC.closePath();
+            //进度条
+            oGC.beginPath();
+            oGC.strokeStyle='red';
+            oGC.arc(oC.width/2,oC.height/2,rad,d2r(-90),d2r(360*(num/100)-90),false);
+            oGC.stroke();
+            oGC.closePath();
+            //文字
+            oGC.font = '40px Arial'
+            oGC.textBaseline = 'top';
+            oGC.fillStyle = 'red'
+            var w = oGC.measureText(parseInt(num)+'%').width;
+            oGC.fillText(parseInt(num)+'%', (oC.width-w)/2,(oC.height-40)/2);
+            //小圆
+            oGC.beginPath();
+            oGC.fillStyle = 'red';
+            var x = oC.width/2+rad*Math.cos((360*(num/100)-90)*Math.PI/180);
+            var y = oC.height/2+rad*Math.sin((360*(num/100)-90)*Math.PI/180);
+            oGC.arc(x,y,15,0,2*Math.PI,false);
+            oGC.fill()
+            oGC.closePath();
+
+        }
+        anmine({
+            //百分比
+            progress: 90,
+            //速度0.1~1
+            speed: 0.5,
+            //圆的半径
+            rad: 120,
+            //线的宽度
+            lw: 10
+        })
+    })()
+    </script>
+</body>
+
+</html>

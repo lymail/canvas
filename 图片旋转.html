@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="button" value="<-">
+    <input type="button" value="->">
+    <div>
+        <img src="img/i-10.png" id="img1">
+    </div>
+    <script>
+    var oImg = document.getElementById('img1');
+    var aInp = document.getElementsByTagName('input');
+    var yImg = new Image();
+    yImg.src = oImg.src;
+    yImg.onload = function() {
+        draw(oImg)
+    }
+    var iNow = 0;
+
+    function draw(obj) {
+        var oc = document.createElement('canvas');
+        oc.width = obj.width;
+        oc.height = obj.height;
+        var oGC = oc.getContext('2d');
+        obj.parentNode.replaceChild(oc, obj);
+        oGC.drawImage(obj, 0, 0);
+        aInp[1].onclick = function() {
+            iNow++;
+            if (iNow > 3) {
+                iNow = 0;
+            }
+            cRe();
+        }
+        aInp[0].onclick = function() {
+            iNow--;
+            if (iNow < 0) {
+                iNow = 3;
+            }
+            cRe();
+        }
+
+        function cRe() {
+            if (iNow % 2) {
+                oc.width = obj.height;
+                oc.height = obj.width;
+            } else {
+                oc.width = obj.width;
+                oc.height = obj.height;
+            }
+            oGC.rotate(iNow * 90 * Math.PI / 180);
+            if (iNow == 1) {
+                oGC.drawImage(obj, 0, -obj.height)
+            } else if (iNow == 2) {
+                oGC.drawImage(obj, -obj.width, -obj.height)
+            } else if (iNow == 3) {
+                oGC.drawImage(obj, -obj.width, 0)
+            } else if (iNow == 0) {
+                oGC.drawImage(obj, 0, 0)
+            }
+        }
+    }
+    </script>
+</body>
+
+</html>

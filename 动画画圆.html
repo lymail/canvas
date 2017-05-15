@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style>
+canvas {
+    border: 1px solid #000;
+}
+</style>
+
+<body>
+    <canvas width="320" height="320" id="canvas"></canvas>
+  
+    <script src="hidpi-canvas.min.js" type="text/javascript"></script>
+    <script>
+    ;
+    (function() {
+        window.requestAnimFrame = (function() {
+            return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function(callback, element) {
+                    window.setTimeout(callback, 1000 / 60);
+                };
+        })();
+
+        function init() {
+            var oC = document.getElementById('canvas')
+            var oGC = oC.getContext('2d');
+            //图画高清
+            var getPixelRatio = function(context) {
+                var backingStore = context.backingStorePixelRatio ||
+                    context.webkitBackingStorePixelRatio ||
+                    context.mozBackingStorePixelRatio ||
+                    context.msBackingStorePixelRatio ||
+                    context.oBackingStorePixelRatio ||
+                    context.backingStorePixelRatio || 1;
+
+                return (window.devicePixelRatio || 1) / backingStore;
+            };
+           getPixelRatio(oGC);
+            //角度转弧度
+            function d2a(n) {
+                return n * Math.PI / 180;
+            }
+            var obj = {
+                i: 0,
+                //百分比
+                angle: 90
+            }
+
+            function arcFun(x, y, str, end, dir) {
+                return oGC.arc(x, y, 150, str, end, dir)
+            }
+            //画图
+            (function drawFun() {
+                //alert(2)
+                //console.log(oC.width)
+                obj.i += 0.3;
+                oGC.clearRect(0, 0, oC.width, oC.height);
+
+
+                oGC.lineWidth = '10';
+                //背景圆
+                oGC.beginPath();
+                oGC.strokeStyle = '#ccc';
+                /*oGC.arc(160, 160, 150, 0, 2 * Math.PI, false);*/
+                arcFun(oC.width / 2, oC.height / 2, 0, 2 * Math.PI, false);
+                oGC.stroke();
+                oGC.closePath();
+
+                //进度圆
+                oGC.beginPath();
+                oGC.strokeStyle = 'red';
+                arcFun(oC.width / 2, oC.height / 2, d2a(-90), d2a(360 * (obj.i / 100) - 90), false);
+                oGC.stroke();
+                oGC.closePath();
+
+                //进度数值
+                oGC.font = '50px Arial';
+                oGC.textBaseline = 'top';
+                oGC.fillStyle = 'red'
+                var w = oGC.measureText(parseInt(obj.i) + '%').width;
+                oGC.textAlign = 'content';
+                oGC.fillText(parseInt(obj.i) + '%', (oC.width - w) / 2, (oC.height - 40) / 2);
+                if (obj.i <= obj.angle) {
+                    window.requestAnimFrame(drawFun)
+                }
+            })()
+
+        }
+        init()
+    })()
+    </script>
+</body>
+
+</html>

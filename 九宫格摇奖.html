@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas width='400' height='400' id='canvas'></canvas>
+    <script src="hidpi-canvas.min.js"></script>
+    <script>
+    ;
+    (function() {
+        window.requestAnimFrame = (function() {
+            return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function(callback, element) {
+                    window.setTimeout(callback, 1000 / 60);
+                };
+        })();
+        //图画高清
+        var getPixelRatio = function(context) {
+            var backingStore = context.backingStorePixelRatio ||
+                context.webkitBackingStorePixelRatio ||
+                context.mozBackingStorePixelRatio ||
+                context.msBackingStorePixelRatio ||
+                context.oBackingStorePixelRatio ||
+                context.backingStorePixelRatio || 1;
+
+            return (window.devicePixelRatio || 1) / backingStore;
+        };
+        var x = 0,
+            y = 0,
+            z = 0;
+        var oc = document.getElementById('canvas');
+        var oGc = oc.getContext('2d');
+
+        function darw() {
+            oGc.clearRect(0, 0, oc.width, oc.height)
+            oGc.fillStyle = 'rgba(0,0,0,.5)';
+            oGc.fillRect(0, 0, 300, 300);
+            oGc.clearRect(x, y, 100, 100);
+            z += 20;
+            if (z == 100) {
+                x += 100;
+                z = 0
+            } else if (x == 300) {
+                y += 100;
+                x = 0;
+            } else if (y == 300) {
+                x = 0;
+                y = 0;
+            }
+            requestAnimFrame(darw);
+        }
+        darw()
+    })()
+    </script>
+</body>
+
+</html>

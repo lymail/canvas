@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		canvas{
+			border: 1px solid #000;
+		}
+	</style>
+</head>
+<body>
+	<canvas width="400" height="400" id="c1"></canvas>
+	<script>
+		var oc = document.getElementById('c1').getContext('2d');
+			oc.fillRect(0,0,100,100);
+		var oImg = oc.getImageData(0,0,100,100);
+		for(var i = 0; i<oImg.width*oImg.height*4;i++){
+			oImg.data[i]=parseInt(255*Math.random())
+		}
+			oc.putImageData(oImg,200,200);
+		
+	</script>
+</body>
+</html>

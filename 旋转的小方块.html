@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		canvas{
+			border: 1px solid #000;
+			display: block;
+			margin: 0 auto;
+		}
+	</style>
+</head>
+<body>
+	<canvas width="400" height="400" id="canvas"></canvas>
+	<script>
+		var oC = document.getElementById('canvas');
+		var oGC = oC.getContext('2d');
+		var obj = {
+			w:100,
+			h:100,
+			num:0,
+			s:1,
+			tx:200,
+			ty:200,
+			b:true
+		}
+		oGC.translate(obj.tx,obj.ty);
+		setInterval(function(){
+
+			//console.log(obj.num)
+			obj.num++;
+			//console.log(obj.s)
+			oGC.save();
+			oGC.clearRect(-obj.tx,-obj.ty,oC.width,oC.height);
+			oGC.rotate(obj.num*Math.PI/180);
+			if(obj.s<=100&&obj.b){
+				obj.s++;
+			}else if(obj.s>=0){
+				obj.s--;
+				obj.b = false;
+			}else{
+				obj.b=true;
+			}
+			oGC.scale(obj.s/50,obj.s/50);
+			oGC.translate(-obj.w/2,-obj.h/2);
+			oGC.fillRect(0,0,obj.w,obj.h);
+			oGC.restore();
+		},30)
+	</script>
+</body>
+</html>

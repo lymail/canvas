@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+    var i = 0; 
+    var step = (timestamp, elapsed) => {
+        if (elapsed > 1000 / 7) {
+            //TO DO SOMETHING
+            elapsed = 0
+        }
+        i++
+        console.log(i)
+
+        window.requestAnimationFrame(
+            _timestamp => step(_timestamp, elapsed + _timestamp - timestamp)
+        )
+    }
+    window.requestAnimationFrame(timestamp => step(timestamp, 0))
+    </script>
+</body>
+
+</html>
